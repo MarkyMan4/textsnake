@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 	"time"
 
@@ -38,10 +39,12 @@ type snakeBody struct {
 	direction int
 }
 
+// this is the model used by bubbletea
 type snakeGame struct {
 	gameBoard [][]int
 	snake     snakeBody
 	pellet    coord
+	score     int
 	gameOver  bool
 }
 
@@ -143,8 +146,11 @@ func (s snakeGame) Init() tea.Cmd {
 }
 
 func (s snakeGame) View() string {
+	scoreLabel := scoreStyle.Render("score")
+	scoreText := fmt.Sprintf("\n%s: %d\n\n", scoreLabel, s.score)
+
 	if s.gameOver {
-		return gameOverStyle.Render(gameOverText) + "\nesc to quit\n"
+		return gameOverStyle.Render(gameOverText) + scoreText + "esc to quit\n"
 	}
 
 	screen := ""
@@ -165,9 +171,9 @@ func (s snakeGame) View() string {
 		}
 	}
 
-	helpMsg := "\narrow keys to move\nesc to quit\n"
+	helpMsg := "arrow keys to move\nesc to quit\n"
 
-	return boardStyle.Render(screen) + helpMsg
+	return boardStyle.Render(screen) + scoreText + helpMsg
 }
 
 func (s snakeGame) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -217,7 +223,7 @@ func (s snakeGame) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 
 		if s.snake.body[0].x < 0 || s.snake.body[0].x >= BOARD_WIDTH ||
-			s.snake.body[0].y < 0 || s.snake.body[0].y > BOARD_WIDTH ||
+			s.snake.body[0].y < 0 || s.snake.body[0].y >= BOARD_HEIGHT ||
 			s.snake.isHeadCollidingWithBody() {
 
 			s.gameOver = true
@@ -241,6 +247,7 @@ func (s snakeGame) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if atePellet {
 			s.snake.body = append(s.snake.body, prevSnakePartPos)
 			s.spawnPellet()
+			s.score++
 		}
 
 		s.updateBoard()
