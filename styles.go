@@ -25,6 +25,10 @@ var boardStyle = lipgloss.NewStyle().
 var gameOverStyle = lipgloss.NewStyle().
 	Foreground(lipgloss.Color("#a32a2a"))
 
+var scoreStyle = lipgloss.NewStyle().
+	Bold(true).
+	Foreground(lipgloss.Color("#14db8f"))
+
 var gameOverText = `
 ::::::::      :::     ::::    ::::  ::::::::::   ::::::::  :::     ::: :::::::::: :::::::::  
 :+:    :+:   :+: :+:   +:+:+: :+:+:+ :+:         :+:    :+: :+:     :+: :+:        :+:    :+: 
