@@ -12,4 +12,4 @@ buildall:
 	env GOOS=windows GOARCH=arm64 go build -o $(BIN)_windows_arm64.exe .
 
 clean:
-	rm $(BIN)_*
+	rm $(BIN)*
